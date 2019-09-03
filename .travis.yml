@@ -1,0 +1,87 @@
+language: python
+
+matrix:
+  include:      
+    - python: 2.7
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      
+    - name: "Python 2.7.14 on macOS 10.13"
+      os: osx
+      osx_image: xcode9.3  # Python 2.7.14_2 running on macOS 10.13
+      language: shell  # 'language: python' errors on Travis CI macOS
+      before_install:
+        - python --version        
+        - pip install -U setuptools --user
+        - pip install -U wheel --user
+        - pip install -U numpy --user      
+    - name: "Python 3.6.5 on macOS 10.13"
+      os: osx
+      osx_image: xcode9.4  # Python 3.6.5 running on macOS 10.13
+      language: shell  # 'language: python' is an error on Travis CI macOS
+      before_install:
+        - python3 --version
+        - pip3 install -U pip
+        - pip3 install -U setuptools
+        - pip3 install -U wheel
+        - pip3 install -U numpy            
+    - name: "Python 3.7.3 on macOS 10.13"
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+      before_install:
+        - python3 --version
+        - pip3 install -U pip
+        - pip3 install -U setuptools
+        - pip3 install -U wheel
+        - pip3 install -U numpy        
+      
+    - name: "Python 2.7 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell # 'language: python' errors Travis CI Windows
+      before_install:
+        - choco install python2
+        - python --version
+        - python -m pip install --upgrade pip
+        - pip install -U setuptools
+        - pip install -U wheel
+        - pip install -U numpy
+      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+    - name: "Python 3.5.4 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell # 'language: python' errors Travis CI Windows
+      before_install:
+        - choco install python --version 3.5.4
+        - python3 --version
+        - python3 -m pip install --upgrade pip
+        - pip3 install -U setuptools
+        - pip3 install -U wheel
+        - pip3 install -U numpy
+      env: PATH=/c/Python35:/c/Python35/Scripts:$PATH
+    - name: "Python 3.6.8 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell # 'language: python' errors Travis CI Windows
+      before_install:
+        - choco install python --version 3.6.8
+        - python3 --version
+        - python3 -m pip install --upgrade pip
+        - pip3 install -U setuptools
+        - pip3 install -U wheel
+        - pip3 install -U numpy
+      env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
+    - name: "Python 3.7.4 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell # 'language: python' errors Travis CI Windows
+      before_install:
+        - choco install python --version 3.7.4
+        - python3 --version
+        - python3 -m pip install --upgrade pip
+        - pip3 install -U setuptools
+        - pip3 install -U wheel
+        - pip3 install -U numpy
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+
+script: python3 setup.py test
+after_success: test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
