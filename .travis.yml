@@ -4,10 +4,14 @@ matrix:
   include:
     - python: 2.7
     - python: 3.5
-#      after_success: python setup.py sdist|| python3 setup.py sdist
     - python: 3.6
     - python: 3.7
-
+      after_success:
+        - python3 setup.py sdist
+        - pip3 install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
+    - python: 3.8-dev
+    
     - name: "Python 2.7.14 on macOS 10.13"
       os: osx
       osx_image: xcode9.3  # Python 2.7.14_2 running on macOS 10.13
@@ -17,6 +21,10 @@ matrix:
         - pip install -U setuptools --user
         - pip install -U wheel --user
         - pip install -U numpy --user
+      after_success:
+        - python setup.py bdist_wheel
+        - pip install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
     - name: "Python 3.6.5 on macOS 10.13"
       os: osx
       osx_image: xcode9.4  # Python 3.6.5 running on macOS 10.13
@@ -27,6 +35,10 @@ matrix:
         - pip3 install -U setuptools
         - pip3 install -U wheel
         - pip3 install -U numpy
+      after_success:
+        - python3 setup.py bdist_wheel
+        - pip3 install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
     - name: "Python 3.7.3 on macOS 10.13"
       os: osx
       osx_image: xcode10.2
@@ -37,6 +49,10 @@ matrix:
         - pip3 install -U setuptools
         - pip3 install -U wheel
         - pip3 install -U numpy
+      after_success:
+        - python3 setup.py bdist_wheel
+        - pip3 install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
   
     - name: "Python 3.5.4 on Windows"
       os: windows           # Windows 10.0.17134 N/A Build 17134
@@ -49,6 +65,10 @@ matrix:
         - pip3 install -U wheel
         - pip3 install -U numpy
       env: PATH=/c/Python35:/c/Python35/Scripts:$PATH
+      after_success:
+        - python setup.py bdist_wheel
+        - pip install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
     - name: "Python 3.6.8 on Windows"
       os: windows           # Windows 10.0.17134 N/A Build 17134
       language: shell # 'language: python' errors Travis CI Windows
@@ -60,6 +80,10 @@ matrix:
         - pip3 install -U wheel
         - pip3 install -U numpy
       env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
+      after_success:
+        - python setup.py bdist_wheel
+        - pip install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
     - name: "Python 3.7.4 on Windows"
       os: windows           # Windows 10.0.17134 N/A Build 17134
       language: shell # 'language: python' errors Travis CI Windows
@@ -71,10 +95,11 @@ matrix:
         - pip3 install -U wheel
         - pip3 install -U numpy
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-
-  allow_failures:
-    - python: 3.8-dev
-
+      after_success:
+        - python setup.py bdist_wheel
+        - pip install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
+    
     - name: "Python 2.7 on Windows"
       os: windows           # Windows 10.0.17134 N/A Build 17134
       language: shell # 'language: python' errors Travis CI Windows
@@ -87,21 +112,14 @@ matrix:
         - pip install -U setuptools
         - pip install -U wheel
         - pip install -U numpy
-      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH    
+      after_success:
+        - python setup.py bdist_wheel
+        - pip install -U twine
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
+        
+  allow_failures:
+    - name: "Python 2.7 on Windows"
+      
 script:
   - python3 setup.py test || python setup.py test
-after_success:
-  - python setup.py bdist_wheel || python3 setup.py bdist_wheel
-#deploy:
-#    provider: pypi
-#    server: https://test.pypi.org/legacy/
-#    user: "__token__"
-#    password: $TESTPYPI_TOKEN
-#    skip_existing: true
-#    distributions: "sdist bdist_wheel"
-#    on:
-#        tags: false
-after_success:
-  - pip install -U twine || pip3 install -U twine
-  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/* || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
-#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
