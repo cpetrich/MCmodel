@@ -102,6 +102,6 @@ after_success:
 #    on:
 #        tags: false
 after_success:
-  - pip install twine || pip3 install twine
-  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl}
+  - pip install -U twine || pip3 install -U twine
+  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/* || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
 #  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
