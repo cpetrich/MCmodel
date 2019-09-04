@@ -72,7 +72,7 @@ matrix:
         - pip3 install -U numpy
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
-  - allow_failures:
+  allow_failures:
     - python: 3.8-dev
 
     - name: "Python 2.7 on Windows"
