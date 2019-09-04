@@ -15,14 +15,21 @@ src_path = 'src/mcmodel/c_extension'
 
 c_model_filename = 'mcmodel.c'
 
+this_directory = os.path.abspath(os.path.dirname(__file__))
+
+
 if sys.version_info.major >= 3:
     # Python 3
     with open(os.path.join(src_path, c_model_filename), 'r', encoding = 'latin1') as f:
         text = f.read()
+    with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
 else:
     # Python 2
     with open(os.path.join(src_path, c_model_filename), 'r') as f:
         text = f.read()
+    with open(os.path.join(this_directory, 'README.md')) as f:
+        long_description = f.read()
 
 version = text.split('#define MODULE_VERSION_STRING',1)[1].split('\n',1)[0].strip()[1:-1]
 
@@ -45,16 +52,13 @@ CLASSIFIERS = [
 
 
 
-this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
-
 
 module  = Extension('mcmodel',
                     sources=[os.path.join(src_path, fn) for fn in (c_model_filename,'dSFMT.c')],
                     define_macros=[('DSFMT_MEXP','19937')],
                     include_dirs=[src_path, numpy_path+"/core/include/numpy/"])
+
+version = version+'.post1'
 
 setup(name = 'mcmodel',
       version = version,
