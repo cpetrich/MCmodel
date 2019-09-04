@@ -9,7 +9,7 @@ matrix:
       after_success:
         - python3 setup.py sdist
         - pip3 install -U twine
-        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
+        - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py sdist && twine upload -u ${TESTPYPI_USER} -p ${TESTPYPI_PASS} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*
     - python: 3.8-dev
     
     - name: "Python 2.7.14 on macOS 10.13"

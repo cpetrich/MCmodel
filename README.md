@@ -13,21 +13,31 @@ License: Apache 2.0.
 
 ### Requirements
 
-* Python 2.7 and 3.6 are known to work on Linux and Windows.
-* C-compiler. On Linux, gcc is usually installed.
-  On Windows, install the free MS Visual Studio C compiler in
-  a version compatible with the target Python version.
+* Python 2.7, 3.5, 3.6, 3.7 are known to work on Linux, MacOS, 
+  and Windows.
+* When compiling from source, a C-compiler. On Linux, gcc is 
+  usually installed. On Windows, install the free MS Visual 
+  Studio C compiler in a version compatible with the target 
+  Python version.
 * To build wheels and install with pip: pip, setuptools, wheel
+
+### From PyPI
+
+Run `pip install mcmodel`. Done.
+Later, upgrade with `pip install -U mcmodel`, or uninstall with 
+`pip uninstall mcmodel`.
 
 ### Use without installation
 
+Get the latest source code from https://github.com/cpetrich/MCmodel
 Run `python setup.py build` and copy the contents of the `built/lib.[...]`
 directory into the same directory as your own modeling code.
 
 ### Installation with pip
 
-The module is currently not on PyPi, so a wheel has to be built
-locally and installed with pip. Build the module and create a wheel file
+Get the latest source code from https://github.com/cpetrich/MCmodel
+A wheel will be built locally and installed with pip. 
+Build the module and create a wheel file
 with `python setup.py bdist_wheel`, `cd dist`,
 `pip install mcmodel-[...].whl`. To uninstall the package later run
 `pip uninstall mcmodel`.

@@ -24,6 +24,8 @@ else:
     with open(os.path.join(src_path, c_model_filename), 'r') as f:
         text = f.read()
 
+version = text.split('#define MODULE_VERSION_STRING',1)[1].split('\n',1)[0].strip()[1:-1]
+
 
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
@@ -41,7 +43,13 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 
-version = text.split('#define MODULE_VERSION_STRING',1)[1].split('\n',1)[0].strip()[1:-1]
+
+
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+
 
 module  = Extension('mcmodel',
                     sources=[os.path.join(src_path, fn) for fn in (c_model_filename,'dSFMT.c')],
@@ -57,4 +65,7 @@ setup(name = 'mcmodel',
       package_dir = {'': 'src/mcmodel'},
       install_requires = ['numpy>=1.7'],
       ext_modules = [module],
-      classifiers = CLASSIFIERS)
+      classifiers = CLASSIFIERS,
+      long_description=long_description,
+      long_description_content_type='text/markdown',
+      )
