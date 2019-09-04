@@ -96,7 +96,7 @@ deploy:
     provider: pypi
     server: https://test.pypi.org/legacy/
     user: "__token__"
-    password: "pypi-AgENdGVzdC5weXBpLm9yZwIkZjhhYjhhYWUtMGJkNS00OGE0LWFjYzctNDdkMjZjZmU2Y2UzAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiAqoNy9n2XXuBVRFdYBAGY_iU7rhnVX3yTL0ixFILsMtA"
+    password: "pypi\-AgENdGVzdC5weXBpLm9yZwIkZjhhYjhhYWUtMGJkNS00OGE0LWFjYzctNDdkMjZjZmU2Y2UzAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiAqoNy9n2XXuBVRFdYBAGY_iU7rhnVX3yTL0ixFILsMtA"
     skip_existing: true
     distributions: "sdist bdist_wheel"
     on:
