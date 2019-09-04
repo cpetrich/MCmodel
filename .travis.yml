@@ -4,7 +4,7 @@ matrix:
   include:
     - python: 2.7
     - python: 3.5
-      after_success: python setup.py sdist|| python3 setup.py sdist
+#      after_success: python setup.py sdist|| python3 setup.py sdist
     - python: 3.6
     - python: 3.7
 
@@ -103,4 +103,5 @@ after_success:
 #        tags: false
 after_success:
   - pip install twine || pip3 install twine
-  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
+  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl}
+#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
