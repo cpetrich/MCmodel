@@ -24,6 +24,23 @@ else:
     with open(os.path.join(src_path, c_model_filename), 'r') as f:
         text = f.read()
 
+
+CLASSIFIERS = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",    
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",    
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
 version = text.split('#define MODULE_VERSION_STRING',1)[1].split('\n',1)[0].strip()[1:-1]
 
 module  = Extension('mcmodel',
@@ -31,7 +48,7 @@ module  = Extension('mcmodel',
                     define_macros=[('DSFMT_MEXP','19937')],
                     include_dirs=[src_path, numpy_path+"/core/include/numpy/"])
 
-setup(name = 'MCmodel',
+setup(name = 'mcmodel',
       version = version,
       author = 'Chris Petrich',
       description = 'Monte Carlo Scattering Model',
@@ -39,4 +56,5 @@ setup(name = 'MCmodel',
       test_suite = 'tests',
       package_dir = {'': 'src/mcmodel'},
       install_requires = ['numpy>=1.7'],
-      ext_modules = [module] )
+      ext_modules = [module],
+      classifiers = CLASSIFIERS)

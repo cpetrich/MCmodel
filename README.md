@@ -29,7 +29,7 @@ directory into the same directory as your own modeling code.
 The module is currently not on PyPi, so a wheel has to be built
 locally and installed with pip. Build the module and create a wheel file
 with `python setup.py bdist_wheel`, `cd dist`,
-`pip install MCmodel-3.[...].whl`. To uninstall the package later run
+`pip install mcmodel-[...].whl`. To uninstall the package later run
 `pip uninstall mcmodel`.
 
 ### Test

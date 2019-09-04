@@ -4,6 +4,7 @@ matrix:
   include:
     - python: 2.7
     - python: 3.5
+      after_success: python setup.py sdist|| python3 setup.py sdist
     - python: 3.6
     - python: 3.7
 
@@ -36,19 +37,7 @@ matrix:
         - pip3 install -U setuptools
         - pip3 install -U wheel
         - pip3 install -U numpy
-
-    - name: "Python 2.7 on Windows"
-      os: windows           # Windows 10.0.17134 N/A Build 17134
-      language: shell # 'language: python' errors Travis CI Windows
-      before_install:
-        - choco install vcpython27
-        - choco install python2
-        - python --version
-        - python -m pip install --upgrade pip
-        - pip install -U setuptools
-        - pip install -U wheel
-        - pip install -U numpy
-      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+  
     - name: "Python 3.5.4 on Windows"
       os: windows           # Windows 10.0.17134 N/A Build 17134
       language: shell # 'language: python' errors Travis CI Windows
@@ -83,8 +72,36 @@ matrix:
         - pip3 install -U numpy
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
-script: python3 setup.py test || python setup.py test
+  - allow_failures:
+    - python: 3.8-dev
+
+    - name: "Python 2.7 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell # 'language: python' errors Travis CI Windows
+      before_install:
+        - choco install dotnet3.5    # does not install successfully
+        - choco install vcpython27
+        - choco install python2
+        - python --version
+        - python -m pip install --upgrade pip
+        - pip install -U setuptools
+        - pip install -U wheel
+        - pip install -U numpy
+      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+script:
+  - python3 setup.py test || python setup.py test
 after_success:
-  - pip install twine || pip3 install twine
-  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
-  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
+  - python setup.py bdist_wheel || python3 setup.py bdist_wheel
+deploy:
+    provider: pypi
+    server: https://test.pypi.org/legacy/
+    user: "__token__"
+    password: "pypi-AgENdGVzdC5weXBpLm9yZwIkZjhhYjhhYWUtMGJkNS00OGE0LWFjYzctNDdkMjZjZmU2Y2UzAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiAqoNy9n2XXuBVRFdYBAGY_iU7rhnVX3yTL0ixFILsMtA"
+    skip_existing: true
+    distributions: "sdist bdist_wheel"
+    on:
+        tags: false
+#after_success:
+#  - pip install twine || pip3 install twine
+#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
+#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
