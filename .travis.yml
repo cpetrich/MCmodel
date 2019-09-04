@@ -92,16 +92,15 @@ script:
   - python3 setup.py test || python setup.py test
 after_success:
   - python setup.py bdist_wheel || python3 setup.py bdist_wheel
-deploy:
-    provider: pypi
-    server: https://test.pypi.org/legacy/
-    user: $TESTPYPI_USER
-    password: $TESTPYPI_PASS
-    skip_existing: true
-    distributions: "sdist bdist_wheel"
-    on:
-        tags: false
-#after_success:
-#  - pip install twine || pip3 install twine
-#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
-#  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u cpetrich -p ${TEST_PASSWORD} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
+#deploy:
+#    provider: pypi
+#    server: https://test.pypi.org/legacy/
+#    user: "__token__"
+#    password: $TESTPYPI_TOKEN
+#    skip_existing: true
+#    distributions: "sdist bdist_wheel"
+#    on:
+#        tags: false
+after_success:
+  - pip install twine || pip3 install twine
+  - test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python3 setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz} || test "${TRAVIS_TAG}" == "" && test "${TRAVIS_PULL_REQUEST}" == "false" && python setup.py bdist_wheel && twine upload -u __token__ -p ${TESTPYPI_TOKEN} --repository https://test.pypi.org/legacy/ --repository-url https://test.pypi.org/legacy/  dist/*.{whl,tar.gz}
