@@ -58,7 +58,7 @@ module  = Extension('mcmodel',
                     define_macros=[('DSFMT_MEXP','19937')],
                     include_dirs=[src_path, numpy_path+"/core/include/numpy/"])
 
-version = version+'.post1'
+version = version #+'.post1'
 
 setup(name = 'mcmodel',
       version = version,
