@@ -13,13 +13,11 @@ License: Apache 2.0.
 
 ### Requirements
 
-* Python 2.7, 3.5, 3.6, 3.7 are known to work on Linux, MacOS, 
+* Python 2.7, 3.5, 3.6, 3.7. Should work on Linux, MacOS, 
   and Windows.
-* When compiling from source, a C-compiler. On Linux, gcc is 
-  usually installed. On Windows, install the free MS Visual 
-  Studio C compiler in a version compatible with the target 
-  Python version.
-* To build wheels and install with pip: pip, setuptools, wheel
+* Numpy
+* When compiling from source, a C-compiler, and typically
+  setuptools and wheel.
 
 ### From PyPI
 
@@ -51,15 +49,8 @@ can be run with `python setup.py test`.
 
 The code is currently not reentrant since it uses global state for the random
 number generator, the phase function, and buffers that hold detailed information
-about the most recent particle track. To take advantage of multitasking capabilities
-of recent processors, multiple invocations of this model can be run safely in
-separate processes. In this case it would be prudent to ensure that each invocation
-of the model is seeded uniquely, e.g. through
-```
-import os
-import mcmodel
-mcmmodel.set_seed(int.from_bytes(os.urandom(4),'little'))
-```
+about the most recent particle track. I.e., only one instance of the model per
+process.
 
 The special case - in a scattering model - of "no scattering" (`w0 == 0`) is
 implemented only for `k == 0` (i.e. no absorption).
@@ -157,6 +148,17 @@ This is outside the scope of this overview.
 *[TODO: in a future version, add an option to have Monte Carlo model take care
 of this by selecting a path stochastically.]*
 
+### API
+
+The C code exports currently four functions (see Usage above):
+* `mcmodel.set_seed(...)`
+* `mcmodel.define_phase_function(..., ...)`
+* `mcmodel.simulate(..., ...)`
+* `mcmodel.get_last_particle_track()`
+
+In addion, there is one helper function defined in Python
+* `mcmodel_util.make_phase_function(...)`
+
 ### Parameters
 
 The model domain is a horizontal slab of thickness `thickness`, extending from
@@ -193,6 +195,8 @@ Name | Meaning
 -----|--------
 `angle_in` | copy of `angle` in input dictionary
 `azimuth_in` | copy of `azimuth` in input dictionary
+`angle` | exit eleation angle of parcel
+`azimuth` | exit azimuth of parcel
 `x` | lateral exit coordinate, same unit as `thickness` in input
 `y` | lateral exit coordinate, same unit as `thickness` in input
 `z` | vertical exit coordinate, same unit as `thickness` in input
@@ -213,4 +217,4 @@ The six column entries for each plane crossing are:
 3. x-coordinate at the point of crossing
 4. y-coordinate at the point of crossing
 5. z-coordinate at the point of crossing
-6. particle path length so far
+6. parcel path length so far
